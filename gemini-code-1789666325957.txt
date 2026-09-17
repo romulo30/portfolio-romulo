@@ -1,2 +1,0 @@
-name = "portfolio-master"
-pages_build_output_dir = "."
