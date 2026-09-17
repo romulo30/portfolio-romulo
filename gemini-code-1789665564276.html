@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rômulo Gonçalves — Creative Studio & Digital Architecture</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+        :root {
+            --bg: #020205;
+            --surface: rgba(255, 255, 255, 0.025);
+            --surface-hover: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(168, 85, 247, 0.4);
+            --primary: #a855f7; /* Roxo Neon Sofisticado */
+            --secondary: #06b6d4; /* Ciano Tecnológico */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Universo de Estrelas 3D (Canvas) */
+        #space-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(circle at center, #0a0518 0%, #020205 100%);
+        }
+
+        /* Navbar Dinâmica */
+        header {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1280px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 35px;
+            background: rgba(2, 2, 5, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--primary);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
+        }
+
+        /* Hero Masterpiece */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 160px 20px 80px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 800;
+            line-height: 1.05;
+            max-width: 1050px;
+            margin-bottom: 30px;
+            background: linear-gradient(180deg, #ffffff 20%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            line-height: 1.7;
+            margin-bottom: 45px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary), #9333ea);
+            color: #fff;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-main:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.7);
+        }
+
+        .btn-ghost {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            transform: translateY(-4px);
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        /* Estrutura de Seções */
+        section {
+            padding: 140px 8%;
+            position: relative;
+        }
+
+        .sec-header {
+            margin-bottom: 80px;
+        }
+
+        .sec-tag {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .sec-header h2 {
+            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+        }
+
+        .sec-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        /* Grid de Serviços Imersivos */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .service-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 50px 40px;
+            border-radius: 28px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .service-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(168, 85, 247, 0.08), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .service-box:hover::after {
+            opacity: 1;
+        }
+
+        .service-box:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-glow);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .service-box h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .service-box p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .service-tags span {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 5px 14px;
+            border-radius: 20px;
+            color: var(--text-muted);
+        }
+
+        /* Casos de Estudo Detalhados */
+        .case-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media(max-width: 968px) {
+            .case-showcase { grid-template-columns: 1fr; }
+        }
+
+        .case-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 45px;
+            border-radius: 28px;
+            backdrop-filter: blur(15px);
+            transition: transform 0.4s;
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        .case-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .case-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        /* Seção Processo / Workflow Rigoroso */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .process-step {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px 30px;
+            border-radius: 22px;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .process-step span {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .process-step h4 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .process-step p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Seção Sobre e Arquitetura */
+        .about-master {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media(max-width: 900px) {
+            .about-master { grid-template-columns: 1fr; }
+        }
+
+        .about-text-block p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            line-height: 1.9;
+            margin-bottom: 25px;
+        }
+
+        .specs-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 28px;
+            backdrop-filter: blur(20px);
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .spec-item:last-child { border-bottom: none; }
+        .spec-item span:first-child { color: var(--text-muted); }
+        .spec-item span:last-child { font-weight: 700; color: var(--text-main); }
+
+        .live-status {
+            color: #22c55e !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-status::before {
+            content: '';
+            width: 8px; height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Footer Supremo */
+        footer {
+            padding: 160px 10% 80px;
+            background: linear-gradient(180deg, transparent, #000000);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            position: relative;
+        }
+
+        .footer-box h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 25px;
+            letter-spacing: -2px;
+        }
+
+        .footer-box p {
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 50px;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+
+        .social-dock {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .social-link:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.2);
+        }
+
+        .copyright {
+            margin-top: 60px;
+            color: rgba(148, 163, 184, 0.4);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Universo de Estrelas Interativo -->
+    <canvas id="space-canvas"></canvas>
+
+    <!-- Header / Navbar -->
+    <header>
+        <a href="#" class="logo">
+            <div class="logo-dot"></div>
+            RÔMULO GONÇALVES
+        </a>
+        <nav>
+            <a href="#servicos">Expertise</a>
+            <a href="#casos">Casos</a>
+            <a href="#processo">Processo</a>
+            <a href="#sobre">Sobre</a>
+            <a href="https://wa.me/5596991678078?text=Olá%20Rômulo,%20vim%20através%20do%20seu%20portfólio%20master." target="_blank" class="nav-btn">Contato Direto</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section Masterpiece -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span>🚀 Arquitetura Digital & Direção Criativa</span>
+        </div>
+        <h1>Elevando o padrão visual do seu negócio no digital.</h1>
+        <p>Especialista em Web Design de alta performance, edição de vídeos orientada por ritmo imersivo e desenvolvimento visual potenciado por inteligência artificial.</p>
+        <div class="hero-cta">
+            <a href="https://wa.me/5596991678078?text=Olá%20Rômulo,%20quero%20desenvolver%20um%20projeto%20com%20você." target="_blank" class="btn-main">Iniciar Projeto no WhatsApp</a>
+            <a href="#servicos" class="btn-ghost">Explorar Ecossistema</a>
+        </div>
+    </section>
+
+    <!-- Seção de Serviços / Expertise -->
+    <section id="servicos">
+        <div class="sec-header">
+            <span class="sec-tag">ÁREAS DE ATUAÇÃO</span>
+            <h2>Soluções completas com rigor técnico e estético</h2>
+            <p>Cada entrega é estruturada do zero para garantir valor de mercado, identidade única e alta retenção de público.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-box">
+                <div class="service-icon">🌐</div>
+                <h3>Web Design & Interfaces</h3>
+                <p>Criação de sites modernos, responsivos e otimizados, desenhados para converter visitantes em clientes fiéis através de uma navegação fluida.</p>
+                <div class="service-tags">
+                    <span>UI/UX Design</span>
+                    <span>Alta Performance</span>
+                    <span>Responsivo</span>
+                </div>
+            </div>
+            <div class="service-box">
+                <div class="service-icon">🎬</div>
+                <h3>Edição de Vídeo & Ritmo</h3>
+                <p>Construção de narrativas audiovisuais focadas em retenção de atenção nos primeiros segundos, dinâmicas para redes sociais e apresentações corporativas.</p>
+                <div class="service-tags">
+                    <span>Reels / TikTok</span>
+                    <span>Institucional</span>
+                    <span>Ritmo Narrativo</span>
+                </div>
+            </div>
+            <div class="service-box">
+                <div class="service-icon">✨</div>
+                <h3>Criação com Inteligência Artificial</h3>
+                <p>Tratamento visual avançado, manipulação artística e geração de ativos gráficos de altíssima precisão aliados à direção visual humana.</p>
+                <div class="service-tags">
+                    <span>Tratamento IA</span>
+                    <span>Direção Visual</span>
+                    <span>Alta Fidelidade</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Casos de Sucesso -->
+    <section id="casos">
+        <div class="sec-header">
+            <span class="sec-tag">PORTFÓLIO PRÁTICO</span>
+            <h2>Resolução de problemas reais</h2>
+            <p>Projetos pensados como casos práticos: diagnóstico do desafio, estratégia implementada e entregáveis.</p>
+        </div>
+        <div class="case-showcase">
+            <div class="case-card">
+                <h3>Portal Turismo / Macapá</h3>
+                <p>Organização completa de destinos, pacotes e solicitações de viagem em uma experiência digital acessível, limpa e integrada diretamente ao canal de atendimento.</p>
+                <div class="service-tags">
+                    <span>Arquitetura Web</span>
+                    <span>Foco em Conversão</span>
+                    <span>WhatsApp Direto</span>
+                </div>
+            </div>
+            <div class="case-card">
+                <h3>Hotel Central & Bistrô</h3>
+                <p>Modernização institucional completa, unindo apresentação de acomodações, acesso ágil a informações e cardápio digital dinâmico acessível via QR Code.</p>
+                <div class="service-tags">
+                    <span>Hospitalidade</span>
+                    <span>Cardápio QR Code</span>
+                    <span>Reservas Diretas</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Processo Criativo -->
+    <section id="processo">
+        <div class="sec-header">
+            <span class="sec-tag">FLUXO DE TRABALHO</span>
+            <h2>Do conceito inicial à publicação</h2>
+        </div>
+        <div class="process-grid">
+            <div class="process-step">
+                <span>ETAPA 01</span>
+                <h4>Diagnóstico & Ideia</h4>
+                <p>Você me apresenta sua necessidade, mesmo que os detalhes ainda estejam em formato de rascunho.</p>
+            </div>
+            <div class="process-step">
+                <span>ETAPA 02</span>
+                <h4>Direção & Estratégia</h4>
+                <p>Alinhamos referências estéticas, objetivos de mercado e o escopo exato do projeto.</p>
+            </div>
+            <div class="process-step">
+                <span>ETAPA 03</span>
+                <h4>Desenvolvimento</h4>
+                <p>A construção ganha vida com acompanhamento transparente e refinamentos estéticos.</p>
+            </div>
+            <div class="process-step">
+                <span>ETAPA 04</span>
+                <h4>Entrega & Publicação</h4>
+                <p>Finalização minuciosa e entrega pronta para escalar o seu posicionamento digital.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Sobre / Arquitetura -->
+    <section id="sobre">
+        <div class="sec-header">
+            <span class="sec-tag">PERFIL PROFISSIONAL</span>
+            <h2>Sobre Rômulo Gonçalves</h2>
+        </div>
+        <div class="about-master">
+            <div class="about-text-block">
+                <p>Atuo na interseção entre design visual de alto padrão e tecnologia moderna. Cada projeto desenvolvido sob meu nome carrega um compromisso rigoroso com a autenticidade e a clareza de comunicação.</p>
+                <p>Sem atalhos genéricos ou soluções robóticas padronizadas: meu foco é entregar produtos digitais inteligentes que valorizam marcas e geram impacto prático real.</p>
+            </div>
+            <div class="specs-panel">
+                <div class="spec-item">
+                    <span>Base Operacional</span>
+                    <span>Macapá, AP (Atendimento Global)</span>
+                </div>
+                <div class="spec-item">
+                    <span>Especialização</span>
+                    <span>Web, Audiovisual & IA</span>
+                </div>
+                <div class="spec-item">
+                    <span>Status de Agenda</span>
+                    <span class="live-status">Disponível para novos projetos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé & Contato Definitivo -->
+    <footer>
+        <div class="footer-box">
+            <span class="sec-tag">VAMOS CONVERTR SUA IDEIA EM REALIDADE</span>
+            <h2>Tem um projeto em mente?</h2>
+            <p>Converse diretamente comigo pelo WhatsApp ou envie uma mensagem por e-mail. Sem intermediários, com foco total na excelência do resultado.</p>
+            <a href="https://wa.me/5596991678078?text=Olá%20Rômulo,%20quero%20tirar%20minha%20ideia%20do%20papel." target="_blank" class="btn-main">Falar no WhatsApp (+55 96 99167-8078)</a>
+        </div>
+        <div class="social-dock">
+            <a href="https://wa.me/5596991678078" target="_blank" class="social-link">WhatsApp Direto</a>
+            <a href="https://instagram.com/oromulovs" target="_blank" class="social-link">Instagram (@oromulovs)</a>
+            <a href="mailto:romulocarva15@gmail.com" class="social-link">romulocarva15@gmail.com</a>
+        </div>
+        <div class="copyright">
+            Rômulo Gonçalves © 2026 · Arquitetura Digital & Design de Interfaces. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <!-- Script JavaScript para o Universo 3D de Estrelas e Efeito de Luz no Mouse -->
+    <script>
+        // Efeito interativo de luz nos cards de serviço
+        document.querySelectorAll('.service-box').forEach(box => {
+            box.addEventListener('mousemove', e => {
+                const rect = box.getBoundingClientRect();
+                box.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                box.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+        });
+
+        // Universo de Estrelas 3D no Canvas
+        const canvas = document.getElementById('space-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const mouse = { x: width / 2, y: height / 2, targetX: width / 2, targetY: height / 2 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.targetX = e.clientX;
+            mouse.targetY = e.clientY;
+        });
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = (Math.random() - 0.5) * width * 2;
+                this.y = (Math.random() - 0.5) * height * 2;
+                this.z = Math.random() * width;
+                this.size = Math.random() * 1.8;
+                this.color = Math.random() > 0.3 ? '#ffffff' : (Math.random() > 0.5 ? '#a855f7' : '#06b6d4');
+            }
+            update() {
+                // Movimento em direção ao fundo/frente com base no mouse
+                let speed = 1.2;
+                this.z -= speed;
+                if (this.z <= 0) {
+                    this.reset();
+                    this.z = width;
+                }
+            }
+            draw() {
+                let k = 250 / this.z;
+                let px = this.x * k + width / 2 + (mouse.x - width / 2) * 0.05;
+                let py = this.y * k + height / 2 + (mouse.y - height / 2) * 0.05;
+
+                if (px >= 0 && px <= width && py >= 0 && py <= height) {
+                    let pSize = Math.max(0, (1 - this.z / width) * this.size * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(px, py, pSize, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        const stars = Array.from({ length: 700 }, () => new Star());
+
+        function animateSpace() {
+            mouse.x += (mouse.targetX - mouse.x) * 0.05;
+            mouse.y += (mouse.targetY - mouse.y) * 0.05;
+
+            ctx.fillStyle = 'rgba(2, 2, 5, 0.3)';
+            ctx.fillRect(0, 0, width, height);
+
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            requestAnimationFrame(animateSpace);
+        }
+
+        animateSpace();
+    </script>
+</body>
+</html>
