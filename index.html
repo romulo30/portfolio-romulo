@@ -8,13 +8,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
         :root {
-            --bg: #030712; /* Azul Marinho Extremamente Profundo */
+            --bg: #030712;
             --surface: rgba(15, 23, 42, 0.6);
             --surface-hover: rgba(30, 41, 59, 0.8);
             --border: rgba(56, 189, 248, 0.12);
             --border-glow: rgba(56, 189, 248, 0.5);
-            --primary: #38bdf8; /* Azul Ciano Profissional */
-            --secondary: #818cf8; /* Azul Índigo / Neons Suaves */
+            --primary: #38bdf8;
+            --secondary: #818cf8;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -504,7 +504,7 @@
             <div class="service-box">
                 <div class="service-icon">🌐</div>
                 <h3>Criação de Sites & Landing Pages</h3>
-                <p>Desenvolvimento de páginas de alta performance, focadas em conversão, carregamento instantáneo e design responsivo de elite.</p>
+                <p>Desenvolvimento de páginas de alta performance, focadas em conversão, carregamento instantâneo e design responsivo de elite.</p>
                 <div class="service-tags">
                     <span>Landing Pages</span>
                     <span>UI/UX Design</span>
@@ -618,14 +618,16 @@
     </footer>
 
     <script>
+        // Efeito interativo de luz nos cards
         document.querySelectorAll('.service-box').forEach(box => {
             box.addEventListener('mousemove', e => {
                 const rect = box.getBoundingClientRect();
                 box.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-                box.style.setProperty('--mouse-y`, `${e.clientY - rect.top}px`);
+                box.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
             });
         });
 
+        // Universo de Estrelas 3D no Canvas
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
 
